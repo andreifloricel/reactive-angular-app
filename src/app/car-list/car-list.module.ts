@@ -16,6 +16,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { SearchBoxComponent } from './components/search-box/search-box.component';
 import { CarsService } from './services/cars.service';
 import { MatInputModule } from '@angular/material';
+import {FormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { MatInputModule } from '@angular/material';
     LayoutModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    FormsModule
   ],
   providers: [CarsService],
 })
