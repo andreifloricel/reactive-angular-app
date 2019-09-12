@@ -1,0 +1,17 @@
+[
+  {
+    "type": "3-wheel",
+    "handling": "bad",
+    "cost": 2
+  },
+  {
+    "type": "regular",
+    "handling": "ok",
+    "cost": 3
+  },
+  {
+    "type": "fine",
+    "handling": "superb",
+    "cost": 5
+  }
+]

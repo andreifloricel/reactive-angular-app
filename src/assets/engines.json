@@ -1,0 +1,20 @@
+[
+  {
+    "type": "Basic",
+    "speed": 3.5,
+    "cylinders": 3,
+    "cost": 2
+  },
+  {
+    "type": "Normal",
+    "speed": 160,
+    "cylinders": 4,
+    "cost": 3
+  },
+  {
+    "type": "Sports",
+    "speed": 323.98,
+    "cylinders": 8,
+    "cost": 5
+  }
+]

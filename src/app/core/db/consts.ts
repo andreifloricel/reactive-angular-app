@@ -1,0 +1,8 @@
+export const DB_KEYS = {
+  CARS_KEY: 'CARS_KEY',
+  ENGINES: 'ENGINES',
+  CHASSIS: 'CHASSIS',
+  BODIES: 'BODIES',
+  COLORS: 'COLORS',
+  IS_SEEDED: 'IS_SEEDED'
+};

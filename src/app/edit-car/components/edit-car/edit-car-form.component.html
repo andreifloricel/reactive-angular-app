@@ -1,0 +1,100 @@
+<div class="row">
+  <div class="col">
+    <form [formGroup]="carForm" novalidate (ngSubmit)="saveCar()">
+      <mat-card class="car-card">
+        <mat-card-header>
+          <mat-card-title>Shipping Information</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+
+          <div class="row">
+            Car cost: {{ currentCar | carCost}}
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width">
+                <input matInput placeholder="Car name" formControlName="name">
+                <mat-error *ngIf="carForm.controls['name'].hasError('required')">
+                  Name is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col engine">
+              <mat-form-field class="full-width">
+                <mat-select placeholder="Engine" formControlName="engine">
+                  <mat-option></mat-option>
+                  <mat-option *ngFor="let engine of masterData.engines" [value]="engine.speed">
+                    {{ engine.type }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="carForm.controls['engine'].hasError('required')">
+                  Engine is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="col chassis">
+              <mat-form-field class="full-width">
+                <mat-select placeholder="Chasis" formControlName="chassis">
+                  <mat-option></mat-option>
+                  <mat-option *ngFor="let ch of masterData.chassis" [value]="ch.handling">
+                    {{ ch.type }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="carForm.controls['chassis'].hasError('required')">
+                  Chassis is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full-width">
+                <mat-select placeholder="Car Body" formControlName="body">
+                  <mat-option></mat-option>
+                  <mat-option *ngFor="let b of masterData.bodies" [value]="b.type">
+                    {{ b.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="carForm.controls['body'].hasError('required')">
+                  Body type is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col">
+              <mat-form-field class="full-width">
+                <mat-select placeholder="Color" formControlName="color">
+                  <mat-option></mat-option>
+                  <mat-option *ngFor="let c of masterData.colors" [value]="c">
+                    {{ c }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="carForm.controls['color'].hasError('required')">
+                  Color is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <mat-error *ngIf="carForm.hasError('tooExpensive')">
+            The car is <strong>too expensive</strong>. Pick cheaper parts. <br>
+          </mat-error>
+
+          <button mat-raised-button [disabled]="carForm.pristine || carForm.errors" color="primary" type="submit">Submit</button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
+
+  </div>
+
+  <div class="col">
+    <cd-car [car]="currentCar" [options]="{ edit: false }"></cd-car>
+  </div>
+</div>

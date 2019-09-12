@@ -1,0 +1,17 @@
+[
+  {
+    "type": "basic.png",
+    "name": "Tin Bucket",
+    "cost": 2
+  },
+  {
+    "type": "car.png",
+    "name": "Normal",
+    "cost": 3
+  },
+  {
+    "type": "supercar.png",
+    "name": "Sleek",
+    "cost": 5
+  }
+]

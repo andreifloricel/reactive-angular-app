@@ -1,0 +1,23 @@
+<mat-card class="card">
+  <mat-card-header>
+    <mat-card-title>{{ car?.name }} </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div>
+      Top speed: {{ car?.speed }} km/h
+    </div>
+
+    <div>
+      Handling: {{ car?.handling }}
+    </div>
+
+    <div>
+      <div>Here is the car</div>
+      <div class="image" [style.background]="getBackground(car)"></div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button *ngIf="options.edit" mat-button (click)="doEdit()">EDIT</button>
+  </mat-card-actions>
+</mat-card>

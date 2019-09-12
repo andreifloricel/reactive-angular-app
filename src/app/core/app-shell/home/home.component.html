@@ -1,0 +1,27 @@
+<div class="grid-container">
+  <h1 class="mat-h1">Dashboard</h1>
+  <mat-grid-list cols="2" rowHeight="350px">
+    <mat-grid-tile colspan="2">
+      <mat-card class="dashboard-card">
+        <mat-card-header>Dashboard</mat-card-header>
+        <mat-card-content>
+          <p>This is a car designer app. You can check out the existing designs, or you can create your own car design.</p>
+
+          <p>Have fun doing it!</p>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <mat-card class="dashboard-card">
+        <a routerLink="cars">Check out the existing cars</a>
+      </mat-card>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+      <mat-card class="dashboard-card">
+        <a routerLink="car/edit/new">Create a new car!</a>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
