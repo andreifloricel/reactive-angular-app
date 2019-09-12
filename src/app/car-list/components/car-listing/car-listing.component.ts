@@ -14,13 +14,19 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class CarListingComponent implements AfterViewInit, OnInit {
 
   @Input() set cars(cars: Car[]) {
-    setTimeout(() => this.dataSource.setData(cars));
+    setTimeout(() => {
+      this.dataSource.setData(cars);
+      this.lastUpdated = new Date();
+    });
   }
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   @ViewChild(MatTable, {static: false}) table: MatTable<CarListingItem>;
   dataSource: CarListingDataSource;
+
+
+  lastUpdated: Date;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['name', 'speed', 'handling', 'thumbnail'];
