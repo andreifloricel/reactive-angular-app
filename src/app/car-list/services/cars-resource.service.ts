@@ -4,6 +4,7 @@ import { Observable, of, throwError } from "rxjs";
 import { StorageService } from "ngx-webstorage/lib/core/interfaces/storageService";
 import { DB_KEYS } from "../../core/db/consts";
 import { map } from "rxjs/operators";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: "root"
@@ -11,7 +12,7 @@ import { map } from "rxjs/operators";
 export class CarsResourceService {
   db: StorageService;
 
-  constructor(db: DbService) {
+  constructor(db: DbService, private http:HttpClient) {
     this.db = db.getDb();
   }
 
@@ -28,6 +29,6 @@ export class CarsResourceService {
 
   getCarsIfIAmLucky(): Observable<any> {
     console.log(`Luck checked on ${new Date()}`)
-    return throwError("You are out of luck!");
+    return this.http.get('some_url');
   }
 }

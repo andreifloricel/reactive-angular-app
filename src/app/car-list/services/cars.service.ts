@@ -1,7 +1,8 @@
-import { Injectable } from "@angular/core";
-import { CarsResourceService } from "./cars-resource.service";
-import { BehaviorSubject, Observable } from "rxjs";
-import { Car } from "../../car-shared/models/car";
+import {Injectable} from "@angular/core";
+import {CarsResourceService} from "./cars-resource.service";
+import {BehaviorSubject, EMPTY, iif, Observable, of, throwError} from "rxjs";
+import {Car} from "../../car-shared/models/car";
+import {catchError, concatMap, delay, retry, retryWhen, shareReplay, tap} from "rxjs/operators";
 
 @Injectable()
 export class CarsService {
@@ -34,9 +35,14 @@ export class CarsService {
   }
 
   searchLucky(val: string) {
-    this.carsDB.getCarsIfIAmLucky().subscribe(cars => {
-      this.allCars = cars;
-      this.carsSubject.next(this.allCars);
-    });
+    this.carsDB.getCarsIfIAmLucky()
+      .pipe(
+        retry(3),
+        shareReplay(1)
+      )
+      .subscribe(cars => {
+        this.allCars = cars;
+        this.carsSubject.next(this.allCars);
+      });
   }
 }

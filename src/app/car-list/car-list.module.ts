@@ -17,12 +17,15 @@ import { SearchBoxComponent } from './components/search-box/search-box.component
 import { CarsService } from './services/cars.service';
 import { MatInputModule } from '@angular/material';
 import {FormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
+import {CarsResourceService} from "./services/cars-resource.service";
 
 
 @NgModule({
   declarations: [CarSearchComponent, CarListingComponent, SearchBoxComponent],
   imports: [
     CommonModule,
+    HttpClientModule,
     CarListRoutingModule,
     MatInputModule,
     MatCardModule,
@@ -35,6 +38,6 @@ import {FormsModule} from "@angular/forms";
     MatSortModule,
     FormsModule
   ],
-  providers: [CarsService],
+  providers: [CarsService,CarsResourceService],
 })
 export class CarListModule { }
