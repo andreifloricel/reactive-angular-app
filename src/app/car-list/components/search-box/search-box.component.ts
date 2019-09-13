@@ -7,7 +7,7 @@ import {
   Output,
   ViewChild
 } from "@angular/core";
-import {fromEvent, Observable} from "rxjs";
+import { fromEvent, Observable } from "rxjs";
 
 @Component({
   selector: "cd-search-box",
@@ -17,16 +17,17 @@ import {fromEvent, Observable} from "rxjs";
 export class SearchBoxComponent implements AfterViewInit {
   searchText = "";
   @Output() filterCars = new EventEmitter();
-  @ViewChild("searchButton", {read: ElementRef, static: false})
+  @ViewChild("searchButton", { read: ElementRef, static: false })
   searchButton: ElementRef;
 
   click$: Observable<Event>;
 
   ngAfterViewInit() {
+    // initialize stream of clicks
     this.click$ = fromEvent(this.searchButton.nativeElement, "click");
 
-    this.click$
-      .subscribe(clickEvent => this.onClick(clickEvent));
+    // handle click event
+    this.click$.subscribe(clickEvent => this.onClick(clickEvent));
   }
 
   onClick(event: Event) {
