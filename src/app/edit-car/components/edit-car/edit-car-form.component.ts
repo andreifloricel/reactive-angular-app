@@ -3,6 +3,11 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Car } from "../../../car-shared/models/car";
 import { MasterData } from "../../models/master-data";
 import { CarService } from "../../services/car.service";
+import { combineLatest, Observable } from "rxjs";
+import { filter, map, scan } from "rxjs/operators";
+import { Engine } from "../../../car-shared/models/engine";
+import { Chassis } from "../../../car-shared/models/chassis";
+import { CarBody } from "../../../car-shared/models/car-body";
 
 const defaultName = "Unknown";
 
@@ -26,7 +31,7 @@ export class EditCarFormComponent {
     name: defaultName
   };
 
-  currentCarCost: number;
+  currentCarCost$: Observable<number>;
 
   constructor(private fb: FormBuilder, private carService: CarService) {
     this.carForm = this.buildForm();
@@ -40,11 +45,22 @@ export class EditCarFormComponent {
         color: car.color
       });
     });
+
+    this.currentCarCost$ = this.carForm.valueChanges.pipe(
+      map(carForm => [
+        this.carService.getEngine(carForm.engine),
+        this.carService.getChassis(carForm.chassis),
+        this.carService.getBody(carForm.body)
+      ]),
+      map(carParts => carParts.map(carPart => (!!carPart ? carPart.cost : 0))),
+      map(costs =>
+        costs.reduce((totalCost, partCost) => totalCost + partCost, 0)
+      )
+    );
   }
 
   private updateCurrentCarData(car: Car) {
     this.currentCar = car;
-    this.currentCarCost = this.calculateCarCost(car);
   }
 
   calculateCarCost(car: Car) {
@@ -91,13 +107,16 @@ export class EditCarFormComponent {
 
   private setCar(car: Car) {
     this.updateCurrentCarData(car || this.currentCar);
-    this.carForm.patchValue({
-      name: car.name,
-      engine: car.speed,
-      chassis: car.handling,
-      body: car.thumbnail,
-      color: car.color
-    });
+    this.carForm.setValue(
+      {
+        name: car.name,
+        engine: car.speed,
+        chassis: car.handling,
+        body: car.thumbnail,
+        color: car.color
+      },
+      { emitEvent: true }
+    );
   }
 
   private validateCarCost(carForm: FormGroup) {

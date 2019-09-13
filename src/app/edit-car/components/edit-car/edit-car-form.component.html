@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col">
-    <form [formGroup]="carForm" novalidate (ngSubmit)="saveCar()">
+    <form [formGroup]="carForm" *ngIf="carForm" novalidate (ngSubmit)="saveCar()">
       <mat-card class="car-card">
         <mat-card-header>
           <mat-card-title>Shipping Information</mat-card-title>
@@ -9,8 +9,7 @@
         <mat-card-content>
 
           <div class="row">
-            <h2>Car cost: {{ currentCarCost }}</h2>
-
+            <h2>Car cost: {{ currentCarCost$ | async }}</h2>
           </div>
 
           <div class="row">
