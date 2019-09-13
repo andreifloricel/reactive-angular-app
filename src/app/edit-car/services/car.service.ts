@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Car } from '../../car-shared/models/car';
-import { CarResourceService } from './car-resource.service';
-import { tap } from 'rxjs/operators';
-import { MasterData } from '../models/master-data';
-import { MasterDataResourceService } from './master-data-resource.service';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {Car} from '../../car-shared/models/car';
+import {CarResourceService} from './car-resource.service';
+import {tap} from 'rxjs/operators';
+import {MasterData} from '../models/master-data';
+import {MasterDataResourceService} from './master-data-resource.service';
+import {Engine} from "../../car-shared/models/engine";
 
 @Injectable()
 export class CarService {
@@ -14,7 +15,12 @@ export class CarService {
   updates$: Observable<string>;
 
   private car: BehaviorSubject<Car> = new BehaviorSubject<Car>(null);
-  private masterData: BehaviorSubject<MasterData> = new BehaviorSubject<MasterData>({ engines: [], bodies: [], chassis: [], colors: []});
+  private masterData: BehaviorSubject<MasterData> = new BehaviorSubject<MasterData>({
+    engines: [],
+    bodies: [],
+    chassis: [],
+    colors: []
+  });
   private updatesSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
   constructor(private carDB: CarResourceService, private masterDataDB: MasterDataResourceService) {
@@ -27,7 +33,7 @@ export class CarService {
 
   getCarByName(name: string) {
     if (name === 'new') {
-      this.car.next({color: 'LightCoral', handling: 'BAD', speed: 3.5, thumbnail: 'basic.png', name: 'New Car' });
+      this.car.next({color: 'LightCoral', handling: 'BAD', speed: 3.5, thumbnail: 'basic.png', name: 'New Car'});
       return;
     }
     this.carDB.getCarByName(name)
@@ -41,5 +47,17 @@ export class CarService {
       this.updatesSubject.next('ERROR');
     }
     this.updatesSubject.next('UPDATED');
+  }
+
+  getEngine(carSpeed: number) {
+    return this.masterData.getValue().engines.find(eng => eng.speed === carSpeed)
+  }
+
+  getChassis(carHandling: string) {
+    return this.masterData.getValue().chassis.find(chs => chs.handling === carHandling)
+  }
+
+  getBody(carThumbnail:string) {
+    return this.masterData.getValue().bodies.find(b => b.type === carThumbnail)
   }
 }

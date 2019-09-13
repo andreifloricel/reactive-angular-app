@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Car } from '../../../car-shared/models/car';
-import { MasterData } from '../../models/master-data';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Car} from '../../../car-shared/models/car';
+import {MasterData} from '../../models/master-data';
+import {CarService} from "../../services/car.service";
 
 const defaultName = 'Unknown';
 
@@ -26,26 +27,62 @@ export class EditCarFormComponent {
     name: defaultName,
   };
 
-  constructor(private fb: FormBuilder) {
-    this.carForm = this.fb.group({
-      name: [defaultName, Validators.required],
-      engine: [null, Validators.required],
-      chassis: [null, Validators.required],
-      body: ['Basic', Validators.required],
-      color: ['Red', Validators.required],
-    },
-      {
-        validators: this.validateCarCost.bind(this),
-      });
+  currentCarCost: number;
+
+  constructor(private fb: FormBuilder, private carService: CarService) {
+    this.carForm = this.buildForm();
+
     this.carForm.valueChanges.subscribe(car => {
-      this.currentCar = {
+      this.updateCurrentCarData({
         name: car.name,
         speed: car.engine,
         handling: car.chassis,
         thumbnail: car.body,
         color: car.color,
-      };
+      });
     });
+  }
+
+  private updateCurrentCarData(car: Car) {
+    this.currentCar = car;
+    this.currentCarCost = this.calculateCarCost(car);
+  }
+
+  calculateCarCost(car: Car) {
+    if (!car) {
+      return null;
+    }
+    const engine = this.carService.getEngine(car.speed)
+    const chassis = this.carService.getChassis(car.handling)
+    const body = this.carService.getBody(car.thumbnail);
+
+    const cost = (engine ? engine.cost : 0) +
+      (chassis ? chassis.cost : 0) +
+      (body ? body.cost : 0);
+    return cost;
+  }
+
+
+
+  /**************
+   *
+   *
+   *
+   *  IRELEVANT
+   *
+   * *******************/
+
+  private buildForm() {
+    return this.fb.group({
+        name: [defaultName, Validators.required],
+        engine: [null, Validators.required],
+        chassis: [null, Validators.required],
+        body: ['Basic', Validators.required],
+        color: ['Red', Validators.required],
+      },
+      {
+        validators: this.validateCarCost.bind(this),
+      });
   }
 
   saveCar() {
@@ -53,7 +90,7 @@ export class EditCarFormComponent {
   }
 
   private setCar(car: Car) {
-    this.currentCar = car || this.currentCar;
+    this.updateCurrentCarData(car || this.currentCar);
     this.carForm.patchValue({
       name: car.name,
       engine: car.speed,
@@ -83,4 +120,5 @@ export class EditCarFormComponent {
     }
 
   }
+
 }
