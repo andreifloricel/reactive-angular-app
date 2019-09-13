@@ -1,21 +1,36 @@
-import {Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
-
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild
+} from "@angular/core";
+import {fromEvent, Observable} from "rxjs";
 
 @Component({
-  selector: 'cd-search-box',
-  templateUrl: './search-box.component.html',
-  styleUrls: ['./search-box.component.scss']
+  selector: "cd-search-box",
+  templateUrl: "./search-box.component.html",
+  styleUrls: ["./search-box.component.scss"]
 })
-export class SearchBoxComponent {
+export class SearchBoxComponent implements AfterViewInit {
+  searchText = "";
   @Output() filterCars = new EventEmitter();
-  @ViewChild('button', {static: false}) button: ElementRef;
+  @ViewChild("searchButton", {read: ElementRef, static: false})
+  searchButton: ElementRef;
 
-  searchText = '';
+  click$: Observable<Event>;
 
-  constructor() {
+  ngAfterViewInit() {
+    this.click$ = fromEvent(this.searchButton.nativeElement, "click");
+
+    this.click$
+      .subscribe(clickEvent => this.onClick(clickEvent));
   }
 
   onClick(event: Event) {
+    console.log(event);
     this.doSearch(this.searchText);
   }
 
