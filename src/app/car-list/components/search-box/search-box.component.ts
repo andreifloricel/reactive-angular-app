@@ -8,6 +8,7 @@ import {
   ViewChild
 } from "@angular/core";
 import { fromEvent, Observable } from "rxjs";
+import { debounce, debounceTime, throttleTime } from "rxjs/operators";
 
 @Component({
   selector: "cd-search-box",
@@ -27,7 +28,11 @@ export class SearchBoxComponent implements AfterViewInit {
     this.click$ = fromEvent(this.searchButton.nativeElement, "click");
 
     // handle click event
-    this.click$.subscribe(clickEvent => this.onClick(clickEvent));
+    this.click$
+      .pipe(
+        throttleTime(1000)
+      )
+      .subscribe(clickEvent => this.onClick(clickEvent));
   }
 
   onClick(event: Event) {
