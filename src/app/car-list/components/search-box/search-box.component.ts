@@ -9,6 +9,7 @@ import {
 } from "@angular/core";
 import { fromEvent, Observable } from "rxjs";
 import { debounce, debounceTime, throttleTime } from "rxjs/operators";
+import { CarsService } from "../../services/cars.service";
 
 @Component({
   selector: "cd-search-box",
@@ -23,15 +24,19 @@ export class SearchBoxComponent implements AfterViewInit {
 
   click$: Observable<Event>;
 
+  constructor(private carsService: CarsService) {}
+
+  doLuckySearch() {
+    this.carsService.searchLucky(this.searchText);
+  }
+
   ngAfterViewInit() {
     // initialize stream of clicks
     this.click$ = fromEvent(this.searchButton.nativeElement, "click");
 
     // handle click event
     this.click$
-      .pipe(
-        throttleTime(1000)
-      )
+      .pipe(throttleTime(1000))
       .subscribe(clickEvent => this.onClick(clickEvent));
   }
 
