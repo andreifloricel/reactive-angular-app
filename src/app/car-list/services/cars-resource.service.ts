@@ -27,6 +27,7 @@ export class CarsResourceService {
   }
 
   getCarsIfIAmLucky(): Observable<any> {
+    console.log(`Luck checked on ${new Date()}`)
     return throwError("You are out of luck!");
   }
 }
