@@ -1,18 +1,17 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Car} from '../../../car-shared/models/car';
-import {MasterData} from '../../models/master-data';
-import {CarService} from "../../services/car.service";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Car } from "../../../car-shared/models/car";
+import { MasterData } from "../../models/master-data";
+import { CarService } from "../../services/car.service";
 
-const defaultName = 'Unknown';
+const defaultName = "Unknown";
 
 @Component({
-  selector: 'cd-edit-car-form',
-  templateUrl: './edit-car-form.component.html',
-  styleUrls: ['./edit-car-form.component.scss']
+  selector: "cd-edit-car-form",
+  templateUrl: "./edit-car-form.component.html",
+  styleUrls: ["./edit-car-form.component.scss"]
 })
 export class EditCarFormComponent {
-
   @Input() set car(car: Car) {
     this.setCar(car);
   }
@@ -24,7 +23,7 @@ export class EditCarFormComponent {
   carForm: FormGroup;
 
   currentCar: any = {
-    name: defaultName,
+    name: defaultName
   };
 
   currentCarCost: number;
@@ -38,7 +37,7 @@ export class EditCarFormComponent {
         speed: car.engine,
         handling: car.chassis,
         thumbnail: car.body,
-        color: car.color,
+        color: car.color
       });
     });
   }
@@ -52,17 +51,16 @@ export class EditCarFormComponent {
     if (!car) {
       return null;
     }
-    const engine = this.carService.getEngine(car.speed)
-    const chassis = this.carService.getChassis(car.handling)
+    const engine = this.carService.getEngine(car.speed);
+    const chassis = this.carService.getChassis(car.handling);
     const body = this.carService.getBody(car.thumbnail);
 
-    const cost = (engine ? engine.cost : 0) +
+    const cost =
+      (engine ? engine.cost : 0) +
       (chassis ? chassis.cost : 0) +
       (body ? body.cost : 0);
     return cost;
   }
-
-
 
   /**************
    *
@@ -73,16 +71,18 @@ export class EditCarFormComponent {
    * *******************/
 
   private buildForm() {
-    return this.fb.group({
+    return this.fb.group(
+      {
         name: [defaultName, Validators.required],
         engine: [null, Validators.required],
         chassis: [null, Validators.required],
-        body: ['Basic', Validators.required],
-        color: ['Red', Validators.required],
+        body: ["Basic", Validators.required],
+        color: ["Red", Validators.required]
       },
       {
-        validators: this.validateCarCost.bind(this),
-      });
+        validators: this.validateCarCost.bind(this)
+      }
+    );
   }
 
   saveCar() {
@@ -96,7 +96,7 @@ export class EditCarFormComponent {
       engine: car.speed,
       chassis: car.handling,
       body: car.thumbnail,
-      color: car.color,
+      color: car.color
     });
   }
 
@@ -106,19 +106,22 @@ export class EditCarFormComponent {
     }
     const car = carForm.getRawValue();
 
-    const engine = this.masterData.engines.find(eng => eng.speed === car.engine);
-    const chassis = this.masterData.chassis.find(chs => chs.handling === car.chassis);
+    const engine = this.masterData.engines.find(
+      eng => eng.speed === car.engine
+    );
+    const chassis = this.masterData.chassis.find(
+      chs => chs.handling === car.chassis
+    );
     const body = this.masterData.bodies.find(b => b.type === car.body);
-    const cost = (engine ? engine.cost : 0) +
+    const cost =
+      (engine ? engine.cost : 0) +
       (chassis ? chassis.cost : 0) +
       (body ? body.cost : 0);
 
     if (cost > 10) {
       return {
-        tooExpensive: 'Car is too expensive to design like this.',
+        tooExpensive: "Car is too expensive to design like this."
       };
     }
-
   }
-
 }
