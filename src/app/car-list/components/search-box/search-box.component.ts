@@ -7,15 +7,12 @@ import {Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/c
   styleUrls: ['./search-box.component.scss']
 })
 export class SearchBoxComponent {
-  @Output() filterCars = new EventEmitter();
-  @ViewChild('button', {static: false}) button: ElementRef;
-
   searchText = '';
-
-  constructor() {
-  }
+  @Output() filterCars = new EventEmitter();
+  @ViewChild('searchButton', {read: ElementRef, static: false}) button: ElementRef;
 
   onClick(event: Event) {
+    console.log(event);
     this.doSearch(this.searchText);
   }
 
