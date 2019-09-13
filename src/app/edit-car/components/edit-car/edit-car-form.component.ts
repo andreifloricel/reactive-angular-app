@@ -36,16 +36,6 @@ export class EditCarFormComponent {
   constructor(private fb: FormBuilder, private carService: CarService) {
     this.carForm = this.buildForm();
 
-    this.carForm.valueChanges.subscribe(car => {
-      this.updateCurrentCarData({
-        name: car.name,
-        speed: car.engine,
-        handling: car.chassis,
-        thumbnail: car.body,
-        color: car.color
-      });
-    });
-
     this.currentCarCost$ = this.carForm.valueChanges.pipe(
       map(carForm => [
         this.carService.getEngine(carForm.engine),
@@ -87,7 +77,7 @@ export class EditCarFormComponent {
    * *******************/
 
   private buildForm() {
-    return this.fb.group(
+    const form =  this.fb.group(
       {
         name: [defaultName, Validators.required],
         engine: [null, Validators.required],
@@ -99,6 +89,18 @@ export class EditCarFormComponent {
         validators: this.validateCarCost.bind(this)
       }
     );
+
+    form.valueChanges.subscribe(car => {
+      this.updateCurrentCarData({
+        name: car.name,
+        speed: car.engine,
+        handling: car.chassis,
+        thumbnail: car.body,
+        color: car.color
+      });
+    });
+
+    return form;
   }
 
   saveCar() {
